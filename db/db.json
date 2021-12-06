@@ -1,8 +1,14 @@
 {
-  "notes":[
+  "notes": [
     {
-      "title":"Test Title",
-      "text":"Test text"
+      "title": "Make Ravioli",
+      "text": "They still need to boil",
+      "id": "63f01129-af9e-40ea-b4e4-dcae0750e94c"
+    },
+    {
+      "title": "Watch Movie",
+      "text": "Its time to watch home alone",
+      "id": "22e88dbd-4814-4e89-b819-cbaeee3bb0ed"
     }
   ]
 }

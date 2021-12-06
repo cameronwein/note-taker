@@ -26,29 +26,45 @@ const hide = (elem) => {
 let activeNote = {};
 
 const getNotes = () =>
-  fetch('/api/notes', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+  fetch('/api/notes')
+  .then(response => {
+    if (!response.ok) {
+      return alert('Error: ' + response.statusText);
+    }
+    console.log(response);
+    return response.json();
   });
 
 const saveNote = (note) =>
   fetch('/api/notes', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify(note),
+  })
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    }
+    alert('Error: ' + response.statusText);
   });
 
-const deleteNote = (id) =>
-  fetch(`/api/notes/${id}`, {
+const deleteNote = async (id) =>
+  await fetch(`/api/notes/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
     },
+  })
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    }
+    alert('Error: ' + response.statusText);
   });
+
 
 const renderActiveNote = () => {
   hide(saveNoteBtn);
@@ -57,10 +73,13 @@ const renderActiveNote = () => {
     noteTitle.setAttribute('readonly', true);
     noteText.setAttribute('readonly', true);
     noteTitle.value = activeNote.title;
-    noteText.value = activeNote.title;
+    noteText.value = activeNote.text;
   } else {
+    noteTitle.removeAttribute('readonly');
+    noteText.removeAttribute('readonly');
     noteTitle.value = '';
     noteText.value = '';
+
   }
 };
 
@@ -97,6 +116,7 @@ const handleNoteDelete = (e) => {
 const handleNoteView = (e) => {
   e.preventDefault();
   activeNote = JSON.parse(e.target.parentElement.getAttribute('data-note'));
+  console.log(activeNote)
   renderActiveNote();
 };
 
@@ -116,7 +136,9 @@ const handleRenderSaveBtn = () => {
 
 // Render the list of note titles
 const renderNoteList = async (notes) => {
-  let jsonNotes = await notes.json();
+  console.log(notes)
+  let jsonNotes = await notes;
+  console.log(jsonNotes);
   if (window.location.pathname === '/notes') {
     noteList.forEach((el) => (el.innerHTML = ''));
   }
