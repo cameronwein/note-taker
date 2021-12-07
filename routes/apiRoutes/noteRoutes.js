@@ -1,12 +1,15 @@
 const router = require('express').Router();
-let { notes } = require('../../db/db.json');
-const { findById, createNewNote, validateNote, deleteNote } = require('../../lib/notes');
+const { createNewNote, deleteNote, validateNote, readNotes  } = require('../../lib/notes');
 const { v4: uuidv4 } = require('uuid');
 
 
+
+
 router.get('/notes', (req, res) => {
-    let results = notes;
+    let results = readNotes();
     res.json(results);
+    console.log("The get has happened");
+    console.log(results);
 });
 
 
@@ -17,14 +20,17 @@ router.post('/notes', (req, res) => {
         res.status(404).send('The note is not properly formatted');
     }
     else {
-        const note = createNewNote(req.body, notes);
+        let notesList = readNotes();
+        const note = createNewNote(req.body, notesList);
         res.json(note);
     }
 });
 
 router.delete('/notes/:id', (req ,res) => {
-    newNoteArray = deleteNote(req.params.id, notes);
+    let notesList = readNotes();
+    const newNoteArray = deleteNote(req.params.id, notesList);
     res.json(newNoteArray);
+    console.log(newNoteArray);
 });
 
 module.exports = router;
